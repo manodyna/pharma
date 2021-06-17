@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
-#define debug 1
+#define debug 0
 #define TRY(a)  if (!(a)) {perror(#a);exit(1);}
 // defining database functionalities
 #define DB "database.csv"
@@ -35,7 +35,7 @@ int main(int argc,char** argv){
     printf("%s\n",argv[1]);
     #endif
     // defining the database commands
-    const char *commands[] = {"-a", "-d", "-s", "-m", "-t" , "-p", NULL};
+    const char *commands[] = {"-a", "-p", "-s", "-m", "-t" , "-d", NULL};
     // setting up the db and its locations
 
     db_t db;
@@ -64,7 +64,7 @@ int main(int argc,char** argv){
     switch (i) {
         case ADD:
             #if debug
-            printf("-a  Create a new entry.\n");
+            // printf("-a  Create a new entry.\n");
             #endif
             printf("Name           :");if((scanf(" %s[^\n]",db.drug     ))<0)break;
             printf("Type           :");if((scanf(" %s[^\n]",db.type))<0)break;
@@ -78,7 +78,7 @@ int main(int argc,char** argv){
             break;
 
         case PRINT:
-            printf ("-p  Print the latest entry.\n");
+            // printf ("-p  Print the latest entry.\n");
             while (!feof(f)){
                 #if debug
                 printf("This works loop enters\n Working on it");
@@ -114,6 +114,53 @@ pdb_t *pdb=NULL,rec=NULL,hd=NULL;
             fprintf (f,"\"%f\",",in_db->price);
             fprintf (f,"\"%d\"\n",in_db->quantity);
             break;
+
+            case PRINT: ;
+            FILE* fp = fopen("database.csv", "r");
+            char buffer[126];
+            int row = 0;
+            int column = 0;
+
+            while (fgets(buffer,1024, fp)) {
+                column = 0;
+                row++;
+                if (row == 1)
+                    continue;
+                // Splitting the data
+                char* value = strtok(buffer, ", ");
+    
+                while (value) {
+                    if (column == 0) {
+                        printf("Drug :");
+                    }
+                    if (column == 1) {
+                        printf("\tType :");
+                    }
+                    if (column == 2) {
+                        printf("\tManufacturer:");
+                    }
+                    if (column == 3) {
+                        printf("\tPrescription status:");
+                    }
+                    if (column == 4) {
+                        printf("\tPrice:");
+                    }
+                    if (column == 5) {
+                        printf("\tQuantity:");
+                    }
+    
+                    printf("%s", value);
+                    value = strtok(NULL, ", ");
+                    column++;
+                }
+    
+                printf("\n");
+            }
+  
+            fclose(fp);  
+            break;
+
+
           default:
             printf("Case not implemented\n");
     }
