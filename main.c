@@ -4,10 +4,12 @@
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
-#define debug 0
+#define debug 1
 #define TRY(a)  if (!(a)) {perror(#a);exit(1);}
+
 // defining database functionalities
 #define DB "database.csv"
+
 
 // defining a struct for the management system
 typedef struct db
@@ -23,6 +25,43 @@ typedef struct db
 }
 db_t,*pdb_t;
 
+
+
+db_t* getData()
+{
+	FILE* fp = fopen("database.csv", "r");
+	#if debug
+	printf("\nFile Opens\n");
+	#endif
+	if (fp==NULL)
+	{
+		printf("File could not be opened\n");
+		return NULL;
+	}
+	char line[100];
+	db_t *head;
+	while(fgets(line,100,fp)!=NULL)
+	{
+		#if debug
+		//printf("%s",typeof(head));
+		#endif
+		char *drug=strtok(line,",");
+		char *type=strtok(NULL,",");
+		char *manufacturer=strtok(NULL,",");
+		char *isPrescription=strtok(NULL,",");
+		int isP=atoi(isPrescription);
+		char *cost=strtok(NULL,",");
+		float price=strtof(cost,NULL);
+		char *quan=strtok(NULL,",");
+		int quantity=atoi(quan);
+		head->drug=drug;
+		#if debug
+		printf("line=%s\n",head->drug);
+		#endif
+	}
+	return head;
+}
+
 // enum for commands
 enum {ADD, PRINT, READLINE, READ, SORT, DESTROY};
 
@@ -37,7 +76,6 @@ int main(int argc,char** argv){
     // defining the database commands
     const char *commands[] = {"-a", "-p", "-s", "-m", "-t" , "-d", NULL};
     // setting up the db and its locations
-
     db_t db;
     db.next = NULL;
     pdb_t dbList;
@@ -69,7 +107,8 @@ int main(int argc,char** argv){
             printf("Name           :");if((scanf(" %s[^\n]",db.drug     ))<0)break;
             printf("Type           :");if((scanf(" %s[^\n]",db.type))<0)break;
             printf("Manufacturer   :");if((scanf(" %s[^\n]",db.manufacturer ))<0)break;
-            // printf("Date of expiry :");if((scanf(" %s[^\n]",buf          ))<0)break;
+            
+			// printf("Date of expiry :");if((scanf(" %s[^\n]",buf          ))<0)break;
             printf("Is prescription(1/0):");if((scanf(" %d[^\n]",&db.isPrescription))<0)break;
             printf("Price          :");if((scanf(" %f[^\n]",&db.price))<0)break;
             printf("Quantity       :");if((scanf(" %d[^\n]",&db.quantity))<0)break;
@@ -81,7 +120,7 @@ int main(int argc,char** argv){
             // printf ("-p  Print the latest entry.\n");
             while (!feof(f)){
                 #if debug
-                printf("This works loop enters\n Working on it");
+                printf("This works loop enters\n Working on it\n");
                 #endif
 
                  dao (PRINT,f,&db);
@@ -106,58 +145,24 @@ pdb_t *pdb=NULL,rec=NULL,hd=NULL;
     char buf[100];
     switch (cmd) {
         case ADD:
-            fprintf (f,"\"%s\",",in_db->drug);
-            fprintf (f,"\"%s\",",in_db->type);
-            fprintf (f,"\"%s\",",in_db->manufacturer);
+            fprintf (f,"%s,",in_db->drug);
+            fprintf (f,"%s,",in_db->type);
+            fprintf (f,"%s,",in_db->manufacturer);
             // fprintf (f,"\"%s\",",time2str(&in_db->dateOfExpiry));
-            fprintf(f, "\"%d\",", in_db->isPrescription);
-            fprintf (f,"\"%f\",",in_db->price);
-            fprintf (f,"\"%d\"\n",in_db->quantity);
+            fprintf(f, "%d,", in_db->isPrescription);
+            fprintf (f,"%f,",in_db->price);
+            fprintf (f,"%d\n",in_db->quantity);
             break;
+			
+            case PRINT:;
+			#if debug
+			printf ("Enters the print case\n");
+			#endif
+			db_t *node=getData();
 
-            case PRINT: ;
-            FILE* fp = fopen("database.csv", "r");
-            char buffer[126];
-            int row = 0;
-            int column = 0;
-
-            while (fgets(buffer,1024, fp)) {
-                column = 0;
-                row++;
-                if (row == 1)
-                    continue;
-                // Splitting the data
-                char* value = strtok(buffer, ", ");
-    
-                while (value) {
-                    if (column == 0) {
-                        printf("Drug :");
-                    }
-                    if (column == 1) {
-                        printf("\tType :");
-                    }
-                    if (column == 2) {
-                        printf("\tManufacturer:");
-                    }
-                    if (column == 3) {
-                        printf("\tPrescription status:");
-                    }
-                    if (column == 4) {
-                        printf("\tPrice:");
-                    }
-                    if (column == 5) {
-                        printf("\tQuantity:");
-                    }
-    
-                    printf("%s", value);
-                    value = strtok(NULL, ", ");
-                    column++;
-                }
-    
-                printf("\n");
-            }
+            printf("%s %s %s %d %f %d\n",node->drug,node->type,node->manufacturer,node->isPrescription,node->price,node->quantity);
   
-            fclose(fp);  
+             
             break;
 
 
