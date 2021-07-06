@@ -11,10 +11,14 @@
 // defining database functionalities
 #define DB "database.csv"
 
+#define sort_by(foo) \
+static int by_##foo (const void*p1, const void*p2) { \
+    return strcmp ((*(const pdb_t*)p1)->foo, (*(const pdb_t*)p2)->foo); }
+
 
 // defining a struct for the management system
 
-
+typedef int (sort)(const void*, const void*);
 
 prio_t getData()
 {
@@ -63,10 +67,12 @@ prio_t getData()
 }
 
 // enum for commands
-enum {ADD, PRINT, READLINE, READ, SORT, DESTROY};
+enum {ADD, PRINT, DRUG, READLINE, READ, SORT, DESTROY};
 
 // data access object(DAO)
-static pdb_t dao (int cmd, FILE *f, pdb_t db);
+static pdb_t dao (int cmd, FILE *f, pdb_t db, sort sort_by);
+
+sort_by(drug);
 
 int main(int argc,char** argv){
     char buf[100];
@@ -74,7 +80,7 @@ int main(int argc,char** argv){
     printf("%s\n",argv[1]);
     #endif
     // defining the database commands
-    const char *commands[] = {"-a", "-p", "-s", "-m", "-t" , "-d", NULL};
+    const char *commands[] = {"-a", "-p", "-n", "-t", "-m" , "-d", NULL};
     // setting up the db and its locations
     db_t db;
     db.next = NULL;
@@ -89,7 +95,7 @@ int main(int argc,char** argv){
         usage: printf("[commands]\n"
         "-a add to database\n"
         "-d delete record\n"
-        "-s sort records by date of expiry\n"
+        "-n sort records by name\n"
         "-m sort records by manufacturer\n"
         "-t sort records by type\n"
         "-p find last added record \n");
@@ -113,7 +119,7 @@ int main(int argc,char** argv){
             printf("Price          :");if((scanf(" %f[^\n]",&db.price))<0)break;
             printf("Quantity       :");if((scanf(" %d[^\n]",&db.quantity))<0)break;
 
-            dao (ADD,f,&db);
+            dao (ADD,f,&db,NULL);
             break;
 
         case PRINT:
@@ -123,9 +129,17 @@ int main(int argc,char** argv){
                 printf("This works loop enters\n Working on it\n");
                 #endif
 
-                 dao (PRINT,f,&db);
+                 dao (PRINT,f,&db,NULL);
                  exit(0);
             }
+            break;
+
+        case DRUG:
+        printf ("-n  Print the latest entry.\n");
+            dbList = dao (READ,f,&db,NULL);
+            dbList = dao (SORT,f,dbList,by_drug);
+            dao (PRINT,f,dbList,NULL);
+            dao (DESTROY,f,dbList,NULL);
             break;
 
         default: {
@@ -139,7 +153,7 @@ int main(int argc,char** argv){
 
 }
 
-static pdb_t dao (int cmd, FILE *f, pdb_t in_db) {
+static pdb_t dao (int cmd, FILE *f, pdb_t in_db, sort sort_by) {
 pdb_t *pdb=NULL,rec=NULL,hd=NULL;
     int i=0, ret;
     char buf[100];
@@ -154,7 +168,7 @@ pdb_t *pdb=NULL,rec=NULL,hd=NULL;
             fprintf (f,"%d\n",in_db->quantity);
             break;
 			
-            case PRINT:;
+        case PRINT:;
 			
 			prio_t node=getData();
 			
@@ -166,6 +180,53 @@ pdb_t *pdb=NULL,rec=NULL,hd=NULL;
              
             break;
 
+        case READLINE:
+            if((fscanf(f," \"%[^\"]\",",in_db->drug     ))<0)break;
+            if((fscanf(f," \"%[^\"]\",",in_db->type))<0)break;
+            if((fscanf(f," \"%[^\"]\",",in_db->manufacturer ))<0)break;
+            // if((fscanf(f," \"%[^\"]\",",buf              ))<0)break;
+            if((fscanf(f," \"%[^\"]\" ",in_db->price      ))<0)break;
+            if((fscanf(f," \"%[^\"]\" ",in_db->quantity      ))<0)break;
+            if((fscanf(f," \"%[^\"]\" ",in_db->isPrescription      ))<0)break;
+            // in_db->date=str2time (buf);
+            break;
+
+        case READ:
+            while (!feof(f)) {
+                dao (READLINE,f,in_db,NULL);
+                TRY (rec=malloc(sizeof(db_t)));
+                *rec=*in_db; /* copy contents */
+                rec->next=hd;/* to linked list */
+                hd=rec;i++;
+            }
+            if (i<2) {
+                puts ("Empty database. Please create some entries.");
+                fclose (f);
+                exit (0);
+            }
+            break;
+
+        case SORT:
+            rec = in_db;
+            for (;in_db;i++) in_db=in_db->next;
+            TRY (pdb=malloc(i*sizeof(pdb_t)));
+                in_db=rec;
+                for (i=0;in_db;i++) {
+                    pdb[i]=in_db;
+                    in_db=in_db->next;
+                }
+                qsort (pdb,i,sizeof in_db,sort_by);
+               
+                pdb[i-1]->next=NULL;
+                for (i=i-1;i;i--) {
+                    pdb[i-1]->next=pdb[i];
+                }
+
+                rec=pdb[0];
+            FREE (pdb);
+            pdb=NULL;
+            break;
+            
 
           default:
             printf("Case not implemented\n");
