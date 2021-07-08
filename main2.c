@@ -5,12 +5,14 @@
 #include <stdbool.h>
 #include <time.h>
 #define debug 1
-#define TRY(a)  if (!(a)) {perror(#a);exit(1);}
 #include "que.h"
 
 // defining database functionalities
 #define DB "database.csv"
 
+#define FREE(a) if(a) {free(a);a=NULL;}
+#define TRY(a)  if (!(a)) {perror(#a);exit(1);}
+#define TRY2(a) if((a)<0) {perror(#a);exit(1);}
 #define sort_by(foo) \
 static int by_##foo (const void*p1, const void*p2) { \
     return strcmp ((*(const pdb_t*)p1)->foo, (*(const pdb_t*)p2)->foo); }
@@ -67,20 +69,23 @@ prio_t getData()
 }
 
 // enum for commands
-enum {ADD, PRINT, DRUG, READLINE, READ, SORT, DESTROY};
+enum {ADD, PRINT, DRUG, MANUFACTURER, TYPE, READLINE, READ, SORT, DESTROY};
 
 // data access object(DAO)
 static pdb_t dao (int cmd, FILE *f, pdb_t db, sort sort_by);
 
 sort_by(drug);
+sort_by(manufacturer);
+sort_by(type);
 
-int main(int argc,char** argv){
+
+int main(int argc,char **argv){
     char buf[100];
-    #if debug
-    printf("%s\n",argv[1]);
-    #endif
+    // #if debug
+    // printf("%s\n",argv[1]);
+    // #endif
     // defining the database commands
-    const char *commands[] = {"-a", "-p", "-n", "-t", "-m" , "-d", NULL};
+    const char *commands[] = {"-a", "-p", "-n", "-m", "-t", NULL};  
     // setting up the db and its locations
     db_t db;
     db.next = NULL;
@@ -135,12 +140,26 @@ int main(int argc,char** argv){
             break;
 
         case DRUG:
-        printf ("-n  Print the latest entry.\n");
             dbList = dao (READ,f,&db,NULL);
             dbList = dao (SORT,f,dbList,by_drug);
             dao (PRINT,f,dbList,NULL);
             dao (DESTROY,f,dbList,NULL);
             break;
+        
+        case MANUFACTURER:
+            dbList = dao (READ,f,&db,NULL);
+            dbList = dao (SORT,f,dbList,by_manufacturer);
+            dao (PRINT,f,dbList,NULL);
+            dao (DESTROY,f,dbList,NULL);
+            break;
+
+        case TYPE:
+            dbList = dao (READ,f,&db,NULL);
+            dbList = dao (SORT,f,dbList,by_type);
+            dao (PRINT,f,dbList,NULL);
+            dao (DESTROY,f,dbList,NULL);
+            break;
+
 
         default: {
             printf ("Unknown command: %s.\n",(strlen(argv[1])<10?argv[1]:NULL));
@@ -227,7 +246,12 @@ pdb_t *pdb=NULL,rec=NULL,hd=NULL;
             pdb=NULL;
             break;
             
-
+            case DESTROY: 
+            while ((rec=in_db)) {
+                in_db=in_db->next;
+                FREE (rec);
+            }   
+            
           default:
             printf("Case not implemented\n");
     }
