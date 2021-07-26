@@ -112,7 +112,7 @@ int main(int argc,char **argv){
 // defining cases for command line inputs
     for (i=0;commands[i]&&strcmp(argv[1],commands[i]);i++);
     switch (i) {
-        case ADD:
+        case ADD :
             #if debug
             // printf("-a  Create a new entry.\n");
             #endif
@@ -227,22 +227,8 @@ pdb_t *pdb=NULL,rec=NULL,hd=NULL;
             break;
 
         case SORT:
-            rec = in_db;
-            for (;in_db;i++) in_db=in_db->next;
-            TRY (pdb=malloc(i*sizeof(pdb_t)));
-                in_db=rec;
-                for (i=0;in_db;i++) {
-                    pdb[i]=in_db;
-                    in_db=in_db->next;
-                }
-                qsort (pdb,i,sizeof in_db,sort_by);
-               
-                pdb[i-1]->next=NULL;
-                for (i=i-1;i;i--) {
-                    pdb[i-1]->next=pdb[i];
-                }
-
-                rec=pdb[0];
+            db_t * start = NULL;
+            bubbleSort(start);
             FREE (pdb);
             pdb=NULL;
             break;

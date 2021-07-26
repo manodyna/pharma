@@ -127,3 +127,106 @@ void disp(const prio_t* p_q)
 		}
 	}
 }
+
+struct Node
+{
+	db_t data;
+	struct Node* next;
+};
+
+typedef struct Node node_t;
+/* Function to insert a node at the beginning of a linked list */
+void insertAtTheBegin(struct Node **start_ref, db_t data);
+  
+/* Function to bubble sort the given linked list */
+void bubbleSort(struct Node *start);
+  
+/* Function to swap data of two nodes a and b*/
+void swap(struct Node *a, struct Node *b);
+  
+/* Function to print nodes in a given linked list */
+void printList(struct Node *start);
+  
+void getData(){
+    FILE* fp = fopen("database.csv", "r");
+	#if debug
+	printf("\nFile Opens\n");
+	#endif
+	if (fp==NULL)
+	{
+		printf("File could not be opened\n");
+		exit(1);
+	}
+
+    char line[100];
+	while(fgets(line,100,fp)!=NULL)
+	{
+		#if debug
+		printf("The while loop enters\n");
+		#endif
+		db_t c;
+		char *drug=strtok(line,",");
+		
+		strcpy(c.drug,drug);
+		char *type=strtok(NULL,",");
+		strcpy(c.type,type);
+		char *manufacturer=strtok(NULL,",");
+		strcpy(c.manufacturer,manufacturer);
+		char *date=strtok(NULL,",");
+		strcpy(c.date,date);
+		char *isPrescription=strtok(NULL,",");
+		int isP=atoi(isPrescription);
+		c.isPrescription=isP;
+		char *cost=strtok(NULL,",");
+		float price=strtof(cost,NULL);
+		c.price=price;
+		char *quan=strtok(NULL,",");
+		int quantity=atoi(quan);
+		c.quantity=quantity;
+		}
+
+}
+
+void insertAtTheBegin(struct Node **start_ref, db_t data)
+{
+    struct Node *ptr1 = (struct Node*)malloc(sizeof(struct Node));
+    ptr1->data = data;
+    ptr1->next = *start_ref;
+    *start_ref = ptr1;
+}
+
+void bubbleSort(struct Node *start)
+{
+    int swapped, i;
+    struct Node *ptr1;
+    struct Node *lptr = NULL;
+  
+    /* Checking for empty list */
+    if (start == NULL)
+        return;
+  
+    do
+    {
+        swapped = 0;
+        ptr1 = start;
+  
+        while (ptr1->next != lptr)
+        {
+            if (ptr1->data.price > ptr1->next->data.price)
+            { 
+                swap(ptr1, ptr1->next);
+                swapped = 1;
+            }
+            ptr1 = ptr1->next;
+        }
+        lptr = ptr1;
+    }
+    while (swapped);
+}
+
+void swap(struct Node *a, struct Node *b)
+{
+    db_t temp = a->data;
+    a->data = b->data;
+    b->data = temp;
+}
