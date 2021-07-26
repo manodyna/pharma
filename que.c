@@ -1,12 +1,16 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 typedef struct db
 {
     char drug[56];
     char type[26];
     //time_t dateOfExpiry;
     char manufacturer[56];
+	char date[50];
     int quantity;
     float price;
-    bool isPrescription;
+    int isPrescription;
     struct db *next;
 }
 db_t,*pdb_t;
@@ -55,7 +59,7 @@ void enque(prio_t* p_q,compo_t* com)
 	
 	strcpy(temp ->c.details.type,com->details.type);
 	strcpy(temp ->c.details.manufacturer,com->details.manufacturer);
-
+	strcpy(temp->c.details.date,com->details.date);
 	temp->c.details.isPrescription=com->details.isPrescription;
 	temp->c.details.price=com->details.price;
 	temp->c.details.quantity=com->details.quantity;
@@ -118,7 +122,7 @@ void disp(const prio_t* p_q)
 	{
 		while(p != NULL)
 		{
-			printf("%s\t%s\t%s\t%d\t%.2f\t%d\n",p->c.details.drug,p->c.details.type,p->c.details.manufacturer,p->c.details.isPrescription,p->c.details.price,p->c.details.quantity);
+			printf("%s\t%s\t%s\t%s\t%d\t%.2f\t%d\n",p->c.details.drug,p->c.details.type,p->c.details.manufacturer,p->c.details.date,p->c.details.isPrescription,p->c.details.price,p->c.details.quantity);
 			p = p->link;
 		}
 	}
