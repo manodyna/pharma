@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+
 #include <time.h>
-#define debug 1
-#include "que.h"
+#define debug 0
+#include "que.c"
 
 // defining database functionalities
 #define DB "database.csv"
@@ -51,6 +51,8 @@ prio_t getData()
 		strcpy(c.details.type,type);
 		char *manufacturer=strtok(NULL,",");
 		strcpy(c.details.manufacturer,manufacturer);
+		char *date=strtok(NULL,",");
+		strcpy(c.details.date,date);
 		char *isPrescription=strtok(NULL,",");
 		int isP=atoi(isPrescription);
 		c.details.isPrescription=isP;
@@ -99,11 +101,10 @@ int main(int argc,char **argv){
     if (argc<2){
         usage: printf("[commands]\n"
         "-a add to database\n"
-        "-d delete record\n"
         "-n sort records by name\n"
         "-m sort records by manufacturer\n"
         "-t sort records by type\n"
-        "-p find last added record \n");
+        "-p print all records \n");
         fclose (f);
         return 0;
     }
@@ -119,7 +120,7 @@ int main(int argc,char **argv){
             printf("Type           :");if((scanf(" %s[^\n]",db.type))<0)break;
             printf("Manufacturer   :");if((scanf(" %s[^\n]",db.manufacturer ))<0)break;
             
-			// printf("Date of expiry :");if((scanf(" %s[^\n]",buf          ))<0)break;
+			printf("Date of expiry(dd-mm-yyyy) :");if((scanf(" %s[^\n]",db.date))<0)break;
             printf("Is prescription(1/0):");if((scanf(" %d[^\n]",&db.isPrescription))<0)break;
             printf("Price          :");if((scanf(" %f[^\n]",&db.price))<0)break;
             printf("Quantity       :");if((scanf(" %d[^\n]",&db.quantity))<0)break;
@@ -175,14 +176,14 @@ int main(int argc,char **argv){
 static pdb_t dao (int cmd, FILE *f, pdb_t in_db, sort sort_by) {
 pdb_t *pdb=NULL,rec=NULL,hd=NULL;
     int i=0, ret;
-    char buf[100];
+    char buf[200];
     switch (cmd) {
         case ADD:
             fprintf (f,"%s,",in_db->drug);
             fprintf (f,"%s,",in_db->type);
             fprintf (f,"%s,",in_db->manufacturer);
-            // fprintf (f,"\"%s\",",time2str(&in_db->dateOfExpiry));
-            fprintf(f, "%d,", in_db->isPrescription);
+            fprintf (f,"%s,",in_db->date);
+			fprintf (f,"%d,", in_db->isPrescription);
             fprintf (f,"%f,",in_db->price);
             fprintf (f,"%d\n",in_db->quantity);
             break;
@@ -203,7 +204,7 @@ pdb_t *pdb=NULL,rec=NULL,hd=NULL;
             if((fscanf(f," \"%[^\"]\",",in_db->drug     ))<0)break;
             if((fscanf(f," \"%[^\"]\",",in_db->type))<0)break;
             if((fscanf(f," \"%[^\"]\",",in_db->manufacturer ))<0)break;
-            // if((fscanf(f," \"%[^\"]\",",buf              ))<0)break;
+			if((fscanf(f,"\"%[^\"]\",",in_db->date))<0)break;
             if((fscanf(f," \"%[^\"]\" ",in_db->price      ))<0)break;
             if((fscanf(f," \"%[^\"]\" ",in_db->quantity      ))<0)break;
             if((fscanf(f," \"%[^\"]\" ",in_db->isPrescription      ))<0)break;
