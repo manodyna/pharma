@@ -17,26 +17,34 @@ int main(int argc, char *argv[])
 		switch (choice)
 		{
 			case 0:
-			exit(0);
+				exit(0);
 			break;
+
 			case 1:
-			addData();
+				addData();
 			break;
+
 			case 2:
 			;
-			drug* d=Read();
-			FILE *fp;
-			fp=fopen("database.csv","r");
-			int Size=countlines(fp);
-			fclose(fp);
-			int chp=choose();
-			sort(d,Size,chp);
-			Print(d,Size);
-			fflush(stdin);
-			getchar();
-			fflush(stdin);
-			getchar();
+				drug* d=Read();
+				FILE *fp;
+				fp=fopen("database.csv","r");
+				int Size=countlines(fp);
+				fclose(fp);
+				int chp=choose();
+				sort(d,Size,chp);
+				Print(d,Size);
+				fflush(stdin);
+				getchar();
+				fflush(stdin);
+				getchar();
 			break;
+
+			case 3:
+				printf("enter element to search\n");
+				char name[56];
+				scanf("%s", name);
+				search(*name);
 		}
 	}
 	
