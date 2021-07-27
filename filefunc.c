@@ -14,30 +14,101 @@ void sort(drug arr[],int size,int type)
 {
 	size=size-1;
 	int i,j,pos;
-	for(i=0;i<size;i++)
+	// for(i=0;i<size;i++)
+	// {
+	// 	pos=i;
+	// 	for(j=i+i;j<size;j++)
+	// 	{
+	// 		switch(type)
+	// 		{
+	// 			case 0:			//cost
+	// 				if(arr[i].price>arr[j].price);
+	// 				{
+	// 					pos=j;
+	// 				}
+	// 			break;
+	// 			case 1:			//name
+	// 			//printf("%s\t%s\t%d\n",arr[i].name,arr[j].name,strcmp(arr[i].name,arr[j].name));
+	// 				if(strcmp(arr[i].name,arr[j].name));
+	// 				{
+	// 					pos=j;
+	// 				}
+	// 			break;
+	// 			// case 2:		//manufacturer
+
+	// 		}
+	// 	}
+	// 	if(pos!=i)
+	// 		swap(&arr[pos],&arr[i]);
+	// }
+	switch (type)
 	{
-		pos=i;
-		for(j=i+i;j<size;j++)
-		{
-			switch(type)
+	case 0:
+		for(i=0; i<size; i++){
+			for (j = 0; j < size; j++)
 			{
-				case 0:			//cost
-				if(arr[i].price>arr[j].price);
-				{
-					pos=j;
+				if(arr[j].price>arr[j+1].price){
+					drug temp;
+					temp = arr[j];
+					arr[j] = arr[j+1];
+					arr[j+1] = temp;
 				}
-				break;
-				case 1:			//name
-				//printf("%s\t%s\t%d\n",arr[i].name,arr[j].name,strcmp(arr[i].name,arr[j].name));
-				if(strcmp(arr[i].name,arr[j].name)>0);
-				{
-					pos=j;
-				}
-				break;
+
 			}
+			
 		}
-		if(pos!=i)
-			swap(&arr[pos],&arr[i]);
+		break;
+
+	case 1:
+		for(i=0; i<size; i++){
+			for (j = 0; j < size; j++)
+			{
+				if(strcmp(arr[j].name,arr[j+1].name)){
+					drug temp;
+					temp = arr[j];
+					arr[j] = arr[j+1];
+					arr[j+1] = temp;
+				}
+
+			}
+			
+		}
+		break;
+	
+	case 2:
+		for(i=0; i<size; i++){
+			for (j = 0; j < size; j++)
+			{
+				if(strcmp(arr[j].manufac,arr[j+1].manufac)){
+					drug temp;
+					temp = arr[j];
+					arr[j] = arr[j+1];
+					arr[j+1] = temp;
+				}
+
+			}
+			
+		}
+		break;
+
+	case 3:
+		for(i=0; i<size; i++){
+			for (j = 0; j < size; j++)
+			{
+				if(arr[j].quantity>arr[j+1].quantity){
+					drug temp;
+					temp = arr[j];
+					arr[j] = arr[j+1];
+					arr[j+1] = temp;
+				}
+
+			}
+			
+		}
+		break;
+	
+	default:
+		break;
 	}
 }
 
