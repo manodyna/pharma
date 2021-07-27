@@ -104,11 +104,15 @@ int addData()
 	scanf("%lf",&price);
 	printf("Enter quantity:");
 	scanf("%d",&quantity);
+	fflush(stdin);
 	printf("Enter details about the medicine:");
-	scanf("%[^\n]",details);
+	fflush(stdin);
+	getchar();
+	fgets(details,200,stdin);
 	FILE *fp=fopen("database.csv","a");
-	fprintf(fp,"%s,%s,%s,%d,%lf,%d,%s\n",name,manufac,date,prescription,price,quantity,details);
+	fprintf(fp,"%sS,%s,%s,%d,%lf,%d,%s\n",name,manufac,date,prescription,price,quantity,details);
 	fclose(fp);
 	fp=NULL;
+	
 	return 0;
 }
