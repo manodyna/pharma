@@ -1,114 +1,41 @@
 int Print(drug *lst,int size);
-void swap(drug *a,drug *b)
-{
-	drug temp=*a;
-	*a=*b;
-	*b=temp;
-}
-void freedom(drug *arr)
-{
-	free(arr);
-	arr=NULL;
-}
+void swap(drug *a,drug *b);
+int date_cmp(char *a,char *b);
 void sort(drug arr[],int size,int type)
 {
-	size=size-1;
 	int i,j,pos;
-	// for(i=0;i<size;i++)
-	// {
-	// 	pos=i;
-	// 	for(j=i+i;j<size;j++)
-	// 	{
-	// 		switch(type)
-	// 		{
-	// 			case 0:			//cost
-	// 				if(arr[i].price>arr[j].price);
-	// 				{
-	// 					pos=j;
-	// 				}
-	// 			break;
-	// 			case 1:			//name
-	// 			//printf("%s\t%s\t%d\n",arr[i].name,arr[j].name,strcmp(arr[i].name,arr[j].name));
-	// 				if(strcmp(arr[i].name,arr[j].name));
-	// 				{
-	// 					pos=j;
-	// 				}
-	// 			break;
-	// 			// case 2:		//manufacturer
-
-	// 		}
-	// 	}
-	// 	if(pos!=i)
-	// 		swap(&arr[pos],&arr[i]);
-	// }
-	switch (type)
+	for(i=0;i<size;i++)
 	{
-	case 0:
-		for(i=0; i<size; i++){
-			for (j = 0; j < size; j++)
+		pos=i;
+		for(j=0;j<size;j++)
+		{
+			if(type==3)
 			{
-				if(arr[j].price>arr[j+1].price){
-					drug temp;
-					temp = arr[j];
-					arr[j] = arr[j+1];
-					arr[j+1] = temp;
+				if(arr[i].price<arr[j].price)
+				{
+					swap(&arr[pos],&arr[j]);
 				}
-
+			}
+			else if(type==1)
+			{
+				if(strcmp(arr[i].name,arr[j].name)<0)
+				{
+					swap(&arr[pos],&arr[j]);
+				}
+			}
+			else if(type==2)
+			{
+				if(strcmp(arr[i].manufac,arr[j].manufac)<0)
+				{
+					swap(&arr[pos],&arr[j]);
+				}
+			}
+			else if(type==4)
+			{
+				date_cmp(arr[i].date,arr[j].date);
 			}
 			
 		}
-		break;
-
-	case 1:
-		for(i=0; i<size; i++){
-			for (j = 0; j < size; j++)
-			{
-				if(strcmp(arr[j].name,arr[j+1].name)){
-					drug temp;
-					temp = arr[j];
-					arr[j] = arr[j+1];
-					arr[j+1] = temp;
-				}
-
-			}
-			
-		}
-		break;
-	
-	case 2:
-		for(i=0; i<size; i++){
-			for (j = 0; j < size; j++)
-			{
-				if(strcmp(arr[j].manufac,arr[j+1].manufac)){
-					drug temp;
-					temp = arr[j];
-					arr[j] = arr[j+1];
-					arr[j+1] = temp;
-				}
-
-			}
-			
-		}
-		break;
-
-	case 3:
-		for(i=0; i<size; i++){
-			for (j = 0; j < size; j++)
-			{
-				if(arr[j].quantity>arr[j+1].quantity){
-					drug temp;
-					temp = arr[j];
-					arr[j] = arr[j+1];
-					arr[j+1] = temp;
-				}
-
-			}
-			
-		}
-		break;
-	
-	default:
-		break;
 	}
 }
 
@@ -128,13 +55,14 @@ int countlines(FILE *fp)
 	return l;
 }
 
-drug* read()
+drug* Read()
 {
 	FILE *fp;
 	fp=fopen("database.csv","r");
 	int Size=countlines(fp),i;
 	drug *drugs=(drug*)calloc(Size,sizeof(drug));
 	rewind(fp);
+	//printf("Size:%d\n",Size);
 	for(i=0;i<Size;i++)
 	{
 		fscanf(fp,"%[^,],%[^,],%[^,],%d,%lf,%d,%[^\n]\n",drugs[i].name,drugs[i].manufac,drugs[i].date,&drugs[i].prescription,&drugs[i].price,&drugs[i].quantity,drugs[i].details);
@@ -146,11 +74,11 @@ drug* read()
 
 int Print(drug *lst,int size)
 {
-	size=size-1;
+	//printf("Size:%d\n",size);
 	int i;
 	for(i=0;i<size;i++)
 	{
-		printf("Name:%s\tCost:%lf\n",lst[i].name,lst[i].price);
+		printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",lst[i].name,lst[i].price,lst[i].manufac,lst[i].date,lst[i].details);
 	}
 }
 
@@ -181,7 +109,7 @@ int addData()
 	getchar();
 	fgets(details,200,stdin);
 	FILE *fp=fopen("database.csv","a");
-	fprintf(fp,"%sS,%s,%s,%d,%lf,%d,%s\n",name,manufac,date,prescription,price,quantity,details);
+	fprintf(fp,"%s,%s,%s,%d,%lf,%d,%s",name,manufac,date,prescription,price,quantity,details);
 	fclose(fp);
 	fp=NULL;
 	
