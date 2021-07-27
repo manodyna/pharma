@@ -17,12 +17,43 @@ void swap(drug *a,drug *b)
 	*a=*b;
 	*b=temp;
 }
-int date_cmp(char *a,char *b)
+
+int date_cmp(char a[],char b[])
 {
 	int d1,m1,y1,d2,m2,y2;
-	fscanf(a,"%d-%d-%d",&d1,&m1,&y1);
-	fscanf(b,"%d-%d-%d",&d2,&m2,&y2);
-	printf("Months:%d %d",m1,m2);
+	
+	sscanf(a,"%d-%d-%d",&d1,&m1,&y1);
+	sscanf(b,"%d-%d-%d",&d2,&m2,&y2);
+	
+	if(y1>y2)
+	{
+		return 1;
+	}
+	else if(y1<y2)
+	{
+		return -1;
+	}
+	else
+	{
+		if(m1>m2)
+		{
+			return 1;
+		}
+		else if(m1<m2)
+		{
+			return -1;
+		}
+		else{
+			if(d1>d2)
+			{
+				return 1;
+			}
+			else if(d1<d2)
+			{
+				return -1;
+			}
+		}
+	}
 	return 0;
 }
 void freedom(drug *arr)
