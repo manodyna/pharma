@@ -117,28 +117,17 @@ int addData()
 }
 
 
-void search(char name[56]){
-	// printf("search called");
+void search(char name[56], drug arr[]){
 	FILE *fp;
 	fp=fopen("database.csv","r");
 	int Size=countlines(fp);
-	drug *drugs=(drug*)calloc(Size,sizeof(drug));
-	// rewind(fp);
 	for(int i =0; i<Size; i++){
-		// printf("loop entered");
-		fscanf(fp,"%[^,],%[^,],%[^,],%d,%lf,%d,%[^\n]\n",drugs[i].name,drugs[i].manufac,drugs[i].date,&drugs[i].prescription,&drugs[i].price,&drugs[i].quantity,drugs[i].details);
-		char drugName[56] = drugs[i].name;
-		int res = strcmp(name, drugName);
-		printf("scanf");
-		if(res==0){
-				printf("compare");
-				printf("search started");
-				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",drugs[i].name,drugs[i].price,drugs[i].manufac,drugs[i].date,drugs[i].details);
-				// return(drugs[i]);
-
-		}else{
-			printf("No such record found");
+		if(strcmp(name, arr[i].name)==0){
+				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",
+												arr[i].name,arr[i].price,arr[i].manufac,arr[i].date,arr[i].details);
+				break;
 		}
 	}
+	printf("no such record found");
 	fclose(fp);
 }
