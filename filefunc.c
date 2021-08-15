@@ -154,9 +154,9 @@ int searchLn(char name[56], drug arr[]){
 }
 
 #define MAX 256
-void delete(int line) 
+void delete(int lno) 
   {
-        int lno, ctr = 0;
+        int ctr = 0;
         char ch;
         FILE *fptr1, *fptr2;
 		char fname[MAX];
