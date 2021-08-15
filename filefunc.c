@@ -160,14 +160,14 @@ void delete(int line)
         char ch;
         FILE *fptr1, *fptr2;
 		char fname[MAX];
-        char str[MAX], temp[] = "temp.csv";
-        fptr1 = fopen("database.csv", "r");
+        char str[MAX], temp[] = "temp.txt";
+        fptr1 = fopen("database.txt", "r");
         if (!fptr1) 
 		{
                 printf(" File not found or unable to open the input file!!\n");
                 return 0;
         }
-        fptr2 = fopen(temp, "w");
+        fptr2 = fopen("temp.txt", "w");
         if (!fptr2) 
 		{
                 printf("Unable to open a temporary file to write!!\n");
@@ -175,7 +175,7 @@ void delete(int line)
                 return 0;
         }
 
-        lno++;
+        lno;
         while (!feof(fptr1)) 
         {
             strcpy(str, "\0");
@@ -189,17 +189,17 @@ void delete(int line)
                 }
             }
         }
-        fclose(fptr1);
+       	fclose(fptr1);
         fclose(fptr2);
-       	remove("database.csv");  	
-        rename("temp.csv", "database.csv"); 	
-   fptr1=fopen(fname,"r"); 
-            ch=fgetc(fptr1); 
-          printf(" Now the content of the file %s is : \n",fname); 
-          while(ch!=EOF) 
-            { 
-                printf("%c",ch); 
-                 ch=fgetc(fptr1); 
-            }
-        fclose(fptr1);
+       	remove("database.txt");  	
+        rename("temp.txt", "database.txt"); 	
+   		// fptr1=fopen("datbase.csv","r"); 
+        // 	ch=fgetc(fptr1); 
+        //   printf(" Now the content of the file %s is : \n",fname); 
+        //   while(ch!=EOF) 
+        //     { 
+        //         printf("%c",ch); 
+        //          ch=fgetc(fptr1); 
+        //     }
+        // fclose(fptr1);
 } 
