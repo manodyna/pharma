@@ -121,7 +121,9 @@ void search(char name[56], drug arr[]){
 	FILE *fp;
 	fp=fopen("database.csv","r");
 	int Size=countlines(fp);
+	int count = 1;
 	for(int i =0; i<Size; i++){
+		count++;
 		if(strcmp(name, arr[i].name)==0){
 				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",
 												arr[i].name,arr[i].price,arr[i].manufac,arr[i].date,arr[i].details);
@@ -131,3 +133,73 @@ void search(char name[56], drug arr[]){
 	printf("no such record found");
 	fclose(fp);
 }
+
+int searchLn(char name[56], drug arr[]){
+	FILE *fp;
+	fp=fopen("database.csv","r");
+	int Size=countlines(fp);
+	int count = 1;
+	for(int i =0; i<Size; i++){
+		count++;
+		if(strcmp(name, arr[i].name)==0){
+				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",
+												arr[i].name,arr[i].price,arr[i].manufac,arr[i].date,arr[i].details);
+				return count;
+				break;
+		}
+		return 1000;
+	}
+	printf("no such record found");
+	fclose(fp);
+}
+
+#define MAX 256
+void delete(int line) 
+  {
+        int lno, ctr = 0;
+        char ch;
+        FILE *fptr1, *fptr2;
+		char fname[MAX];
+        char str[MAX], temp[] = "temp.csv";
+        fptr1 = fopen("database.csv", "r");
+        if (!fptr1) 
+		{
+                printf(" File not found or unable to open the input file!!\n");
+                return 0;
+        }
+        fptr2 = fopen(temp, "w");
+        if (!fptr2) 
+		{
+                printf("Unable to open a temporary file to write!!\n");
+                fclose(fptr1);
+                return 0;
+        }
+
+        lno++;
+        while (!feof(fptr1)) 
+        {
+            strcpy(str, "\0");
+            fgets(str, MAX, fptr1);
+            if (!feof(fptr1)) 
+            {
+                ctr++;
+                if (ctr != lno) 
+                {
+                    fprintf(fptr2, "%s", str);
+                }
+            }
+        }
+        fclose(fptr1);
+        fclose(fptr2);
+        remove(fname);  	
+        rename(temp, fname); 	
+   fptr1=fopen(fname,"r"); 
+            ch=fgetc(fptr1); 
+          printf(" Now the content of the file %s is : \n",fname); 
+          while(ch!=EOF) 
+            { 
+                printf("%c",ch); 
+                 ch=fgetc(fptr1); 
+            }
+        fclose(fptr1);
+} 

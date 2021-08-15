@@ -38,6 +38,14 @@ int main(int argc, char *argv[])
 			getchar();
 			break;
 
+			case 3: ;
+				drug* d3 = Read();
+				char name1[56];
+				printf(" Input the drug you want to remove : ");
+        		scanf("%s", &name1);
+				int lno = searchLn(name1, d3);
+				delete(lno);
+
 			case 4: ;
 				drug* d2 = Read();
 				printf("enter element to search\n");
