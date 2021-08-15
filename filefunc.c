@@ -191,8 +191,8 @@ void delete(int line)
         }
         fclose(fptr1);
         fclose(fptr2);
-        remove(fname);  	
-        rename(temp, fname); 	
+       	remove("database.csv");  	
+        rename("temp.csv", "database.csv"); 	
    fptr1=fopen(fname,"r"); 
             ch=fgetc(fptr1); 
           printf(" Now the content of the file %s is : \n",fname); 
