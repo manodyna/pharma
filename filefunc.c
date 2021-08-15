@@ -165,14 +165,14 @@ void delete(int lno)
         if (!fptr1) 
 		{
                 printf(" File not found or unable to open the input file!!\n");
-                return 0;
+               
         }
         fptr2 = fopen("temp.txt", "w");
         if (!fptr2) 
 		{
                 printf("Unable to open a temporary file to write!!\n");
                 fclose(fptr1);
-                return 0;
+
         }
 
         lno;
