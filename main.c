@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
 			case 1:
 			addData();
 			break;
-
 			case 2:
 			;
 			drug* d=Read();
@@ -43,18 +42,29 @@ int main(int argc, char *argv[])
 				drug* d3 = Read();
 				char name1[56];
 				printf(" Input the drug you want to remove : ");
-        		scanf("%s", &name1);
-				int lno = searchLn(name1, d3);
-				// printf("%d", lno);
+        		scanf("%s", name1);
+				int lno = search(name1, d3);
 				delete(lno);
 				break;
 
 			case 4: ;
 				drug* d2 = Read();
-				printf("enter element to search\n");
+				printf("Enter Drug name to search:");
 				char name[56];
 				scanf("%s", name);
 				search(name, d2);
+				fflush(stdin);
+				getchar();
+				fflush(stdin);
+				getchar();
+				break;
+			default:
+				printf(":/\n");
+				fflush(stdin);
+				getchar();
+				fflush(stdin);
+				getchar();
+				
 		}
 	}
 	
