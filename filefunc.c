@@ -32,7 +32,11 @@ void sort(drug arr[],int size,int type)
 			}
 			else if(type==4)
 			{
-				date_cmp(arr[i].date,arr[j].date);
+				if(date_cmp(arr[i].date,arr[j].date)<0)
+				{
+					swap(&arr[pos],&arr[j]);
+				}
+				
 			}
 			
 		}
