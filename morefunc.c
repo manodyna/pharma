@@ -24,32 +24,37 @@ int date_cmp(char a[],char b[])
 	
 	sscanf(a,"%d-%d-%d",&d1,&m1,&y1);
 	sscanf(b,"%d-%d-%d",&d2,&m2,&y2);
-	
 	if(y1>y2)
 	{
+		//printf("Date1:%d-%d-%d\t>Date2:%d-%d-%d\n",d1,m1,y1,d2,m2,y2);
 		return 1;
 	}
 	else if(y1<y2)
 	{
+		//printf("Date1:%d-%d-%d\t<Date2:%d-%d-%d\n",d1,m1,y1,d2,m2,y2);
 		return -1;
 	}
 	else
 	{
 		if(m1>m2)
 		{
+			//printf("Date1:%d-%d-%d\t>Date2:%d-%d-%d\n",d1,m1,y1,d2,m2,y2);
 			return 1;
 		}
 		else if(m1<m2)
 		{
+			//printf("Date1:%d-%d-%d\t<Date2:%d-%d-%d\n",d1,m1,y1,d2,m2,y2);
 			return -1;
 		}
 		else{
 			if(d1>d2)
 			{
+				//printf("Date1:%d-%d-%d\t>Date2:%d-%d-%d\n",d1,m1,y1,d2,m2,y2);
 				return 1;
 			}
 			else if(d1<d2)
 			{
+				//printf("Date1:%d-%d-%d\t<Date2:%d-%d-%d\n",d1,m1,y1,d2,m2,y2);
 				return -1;
 			}
 		}
