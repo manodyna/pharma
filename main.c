@@ -45,6 +45,10 @@ int main(int argc, char *argv[])
         		scanf("%s", name1);
 				int lno = search(name1, d3);
 				delete(lno);
+				fflush(stdin);
+				getchar();
+				fflush(stdin);
+				getchar();
 				break;
 
 			case 4: ;
