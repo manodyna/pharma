@@ -9,6 +9,10 @@ int choose()
 	if (c==1||c==2||c==3||c==4)
 		return c;
 	printf("Invalid Choice");
+	fflush(stdin);
+	getchar();
+	fflush(stdin);
+	getchar();
 	}
 }
 void swap(drug *a,drug *b)
