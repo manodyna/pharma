@@ -82,7 +82,7 @@ int Print(drug *lst,int size)
 	int i;
 	for(i=0;i<size;i++)
 	{
-		printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",lst[i].name,lst[i].price,lst[i].manufac,lst[i].date,lst[i].details);
+		printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\nDetails:%29s\n\n\n",lst[i].name,lst[i].price,lst[i].manufac,lst[i].date,lst[i].details);
 	}
 }
 
@@ -129,9 +129,7 @@ int search(char name[56], drug arr[]){
 	for(int i =0; i<Size; i++){
 		count++;
 		if(strcmp(name, arr[i].name)==0){
-				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",
-												arr[i].name,arr[i].price,arr[i].manufac,arr[i].date,arr[i].details);
-												fclose(fp);
+				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\nDetails:%29s\n\n\n",arr[i].name,arr[i].price,arr[i].manufac,arr[i].date,arr[i].details);												fclose(fp);
 				return count;
 		}
 	}
@@ -139,28 +137,7 @@ int search(char name[56], drug arr[]){
 	fclose(fp);
 	return -1;
 }
-/* Not important
-int searchLn(char name[56], drug arr[]){
-	FILE *fp;
-	fp=fopen("database.csv","r");
-	int Size=countlines(fp);
-	int count = 1;
-	for(int i =0; i<Size; i++){
-		count++;
-		if(strcmp(name, arr[i].name)==0)
-		{
-				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",
-												arr[i].name,arr[i].price,arr[i].manufac,arr[i].date,arr[i].details);
-												fclose(fp);
-				printf("Count:%d\n",count);
-				return count;
-		}
-	}
-	printf("no such record found");
-	fclose(fp);
-}
-*/
-#define MAX 256
+
 void delete(int lno) 
   {
 	lno-=1;
@@ -183,5 +160,5 @@ void delete(int lno)
 	fclose(reader);
 	fclose(writer);
 	system("rm database.csv");
-	system("cp temp.csv database.csv");
+	system("mv temp.csv database.csv");
 } 
