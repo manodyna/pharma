@@ -193,13 +193,13 @@ void delete(int lno)
         fclose(fptr2);
        	remove("database.txt");  	
         rename("temp.txt", "database.txt"); 	
-   		// fptr1=fopen("datbase.csv","r"); 
-        // 	ch=fgetc(fptr1); 
-        //   printf(" Now the content of the file %s is : \n",fname); 
-        //   while(ch!=EOF) 
-        //     { 
-        //         printf("%c",ch); 
-        //          ch=fgetc(fptr1); 
-        //     }
-        // fclose(fptr1);
+   		fptr1=fopen("datbase.csv","r"); 
+        	ch=fgetc(fptr1); 
+          printf(" Now the content of the file %s is : \n",fname); 
+          while(ch!=EOF) 
+            { 
+                printf("%c",ch); 
+                 ch=fgetc(fptr1); 
+            }
+        fclose(fptr1);
 } 
