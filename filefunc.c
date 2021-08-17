@@ -147,7 +147,6 @@ int searchLn(char name[56], drug arr[]){
 				return count;
 				break;
 		}
-		return 1000;
 	}
 	printf("no such record found");
 	fclose(fp);
@@ -158,7 +157,7 @@ void delete(int lno)
   {
         int ctr = 0;
         char ch;
-        FILE *fptr1, *fptr2;
+        FILE *fptr1, *fptr2, *fptr3;
 		char fname[MAX];
         char str[MAX], temp[] = "temp.txt";
         fptr1 = fopen("database.txt", "r");
@@ -175,7 +174,8 @@ void delete(int lno)
 
         }
 
-        lno;
+		lno--;
+    
         while (!feof(fptr1)) 
         {
             strcpy(str, "\0");
@@ -193,13 +193,13 @@ void delete(int lno)
         fclose(fptr2);
        	remove("database.txt");  	
         rename("temp.txt", "database.txt"); 	
-   		fptr1=fopen("datbase.csv","r"); 
-        	ch=fgetc(fptr1); 
+   		fptr3=fopen("datbase.csv","r"); 
+        	ch=fgetc(fptr3); 
           printf(" Now the content of the file %s is : \n",fname); 
           while(ch!=EOF) 
             { 
                 printf("%c",ch); 
-                 ch=fgetc(fptr1); 
+                 ch=fgetc(fptr3); 
             }
-        fclose(fptr1);
+        fclose(fptr3);
 } 
