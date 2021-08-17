@@ -117,7 +117,7 @@ int addData()
 }
 
 
-void search(char name[56], drug arr[]){
+int search(char name[56], drug arr[]){
 	FILE *fp;
 	fp=fopen("database.csv","r");
 	int Size=countlines(fp);
@@ -127,13 +127,15 @@ void search(char name[56], drug arr[]){
 		if(strcmp(name, arr[i].name)==0){
 				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",
 												arr[i].name,arr[i].price,arr[i].manufac,arr[i].date,arr[i].details);
-				break;
+												fclose(fp);
+				return count;
 		}
 	}
 	printf("no such record found");
 	fclose(fp);
+	return -1;
 }
-
+/* Not important
 int searchLn(char name[56], drug arr[]){
 	FILE *fp;
 	fp=fopen("database.csv","r");
@@ -141,32 +143,34 @@ int searchLn(char name[56], drug arr[]){
 	int count = 1;
 	for(int i =0; i<Size; i++){
 		count++;
-		if(strcmp(name, arr[i].name)==0){
+		if(strcmp(name, arr[i].name)==0)
+		{
 				printf("Name:%12s\tCost:%12.2lf\tManufacturer:%14s\tExpiration Date:%14s\tDetails:%29s\n",
 												arr[i].name,arr[i].price,arr[i].manufac,arr[i].date,arr[i].details);
+												fclose(fp);
+				printf("Count:%d\n",count);
 				return count;
-				break;
 		}
 	}
 	printf("no such record found");
 	fclose(fp);
 }
-
+*/
 #define MAX 256
 void delete(int lno) 
   {
         int ctr = 0;
         char ch;
-        FILE *fptr1, *fptr2, *fptr3;
+        FILE *fptr1, *fptr2;
 		char fname[MAX];
-        char str[MAX], temp[] = "temp.txt";
-        fptr1 = fopen("database.txt", "r");
+        char str[MAX], temp[] = "temp.csv";
+        fptr1 = fopen("database.csv", "r");
         if (!fptr1) 
 		{
                 printf(" File not found or unable to open the input file!!\n");
                
         }
-        fptr2 = fopen("temp.txt", "w");
+        fptr2 = fopen("temp.csv", "w");
         if (!fptr2) 
 		{
                 printf("Unable to open a temporary file to write!!\n");
@@ -174,8 +178,7 @@ void delete(int lno)
 
         }
 
-		lno--;
-    
+        lno;
         while (!feof(fptr1)) 
         {
             strcpy(str, "\0");
@@ -191,15 +194,15 @@ void delete(int lno)
         }
        	fclose(fptr1);
         fclose(fptr2);
-       	remove("database.txt");  	
-        rename("temp.txt", "database.txt"); 	
-   		fptr3=fopen("datbase.csv","r"); 
-        	ch=fgetc(fptr3); 
+       	remove("database.csv");  	
+        rename("temp.csv", "database.csv"); 	
+   		fptr1=fopen("datbase.csv","r"); 
+        	ch=fgetc(fptr1); 
           printf(" Now the content of the file %s is : \n",fname); 
           while(ch!=EOF) 
             { 
                 printf("%c",ch); 
-                 ch=fgetc(fptr3); 
+                 ch=fgetc(fptr1); 
             }
-        fclose(fptr3);
+        fclose(fptr1);
 } 
