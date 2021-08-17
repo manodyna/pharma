@@ -163,50 +163,25 @@ int searchLn(char name[56], drug arr[]){
 #define MAX 256
 void delete(int lno) 
   {
-        int ctr = 0;
-        char ch;
-        FILE *fptr1, *fptr2;
-		char fname[MAX];
-        char str[MAX], temp[] = "temp.csv";
-        fptr1 = fopen("database.csv", "r");
-        if (!fptr1) 
+	lno-=1;
+	FILE *reader=fopen("database.csv","r");
+	FILE *writer=fopen("temp.csv","w");
+	int count=0;
+	char *line=NULL;
+	size_t len=0;
+	ssize_t read;
+	//printf("Line:%d\n",lno);
+	while((read=getline(&line,&len,reader))!=-1)
+	{
+		count++;
+		if (count!=lno)
 		{
-                printf(" File not found or unable to open the input file!!\n");
-               
-        }
-        fptr2 = fopen("temp.csv", "w");
-        if (!fptr2) 
-		{
-                printf("Unable to open a temporary file to write!!\n");
-                fclose(fptr1);
-
-        }
-
-        lno;
-        while (!feof(fptr1)) 
-        {
-            strcpy(str, "\0");
-            fgets(str, MAX, fptr1);
-            if (!feof(fptr1)) 
-            {
-                ctr++;
-                if (ctr != lno) 
-                {
-                    fprintf(fptr2, "%s", str);
-                }
-            }
-        }
-       	fclose(fptr1);
-        fclose(fptr2);
-       	remove("database.csv");  	
-        rename("temp.csv", "database.csv"); 	
-   		fptr1=fopen("datbase.csv","r"); 
-        	ch=fgetc(fptr1); 
-          printf(" Now the content of the file %s is : \n",fname); 
-          while(ch!=EOF) 
-            { 
-                printf("%c",ch); 
-                 ch=fgetc(fptr1); 
-            }
-        fclose(fptr1);
+			fprintf(writer,"%s",line);
+		}
+		
+	}
+	fclose(reader);
+	fclose(writer);
+	system("rm database.csv");
+	system("cp temp.csv database.csv");
 } 
